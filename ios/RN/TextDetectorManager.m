@@ -1,3 +1,4 @@
+#import "TargetConditionals.h"
 #import "TextDetectorManager.h"
 #if __has_include(<MLKitTextRecognition/MLKitTextRecognition.h>)
 @import MLKitVision;
