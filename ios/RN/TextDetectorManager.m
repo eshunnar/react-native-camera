@@ -4,8 +4,11 @@
 //add all imports
 @import MLKitTextRecognition;
 @import MLKitTextRecognitionCommon;
-@import MLCompute;
 @import MLKitVision;
+
+#ifdef TARGET_OS_IOS
+@import MLCompute;
+#endif
 
 @interface TextDetectorManager ()
 @property(nonatomic, strong) MLKTextRecognizer *textRecognizer;
