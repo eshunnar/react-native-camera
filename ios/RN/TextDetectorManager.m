@@ -2,13 +2,10 @@
 #import "TextDetectorManager.h"
 #if __has_include(<MLKitTextRecognition/MLKitTextRecognition.h>)
 @import MLKitVision;
-//add all imports
-@import MLKitTextRecognition;
 @import MLKitTextRecognitionCommon;
-@import MLKitVision;
 
 #if TARGET_OS_IOS
-@import MLCompute;
+#import <MLCompute/MLCompute.h>;
 #endif
 
 @interface TextDetectorManager ()
