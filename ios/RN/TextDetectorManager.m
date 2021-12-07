@@ -1,12 +1,8 @@
-#import "TargetConditionals.h"
 #import "TextDetectorManager.h"
 #if __has_include(<MLKitTextRecognition/MLKitTextRecognition.h>)
 @import MLKitVision;
 @import MLKitTextRecognitionCommon;
-
-#if TARGET_OS_IOS
-#import <MLCompute/MLCompute.h>;
-#endif
+@import MLCompute;
 
 @interface TextDetectorManager ()
 @property(nonatomic, strong) MLKTextRecognizer *textRecognizer;
