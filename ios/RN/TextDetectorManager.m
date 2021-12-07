@@ -7,7 +7,7 @@
 @import MLKitTextRecognitionCommon;
 @import MLKitVision;
 
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
 @import MLCompute;
 #endif
 
