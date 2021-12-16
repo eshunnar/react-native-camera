@@ -6,7 +6,6 @@
   #include <MLKitVision/MLKitVision.h>
 #endif
 @import MLKitTextRecognitionCommon;
-@import MLCompute;
 
 @interface TextDetectorManager ()
 @property(nonatomic, strong) MLKTextRecognizer *textRecognizer;
