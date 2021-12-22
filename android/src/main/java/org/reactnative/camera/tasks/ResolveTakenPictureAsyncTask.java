@@ -15,6 +15,7 @@ import org.reactnative.camera.utils.RNFileUtils;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 
 import java.io.ByteArrayInputStream;
@@ -279,6 +280,7 @@ public class ResolveTakenPictureAsyncTask extends AsyncTask<Void, Void, Writable
             }
         }
 
+        // An exception had to occur, promise has already been rejected. Do not try to resolve it again.
         return null;
     }
 
