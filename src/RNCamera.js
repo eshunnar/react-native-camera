@@ -245,6 +245,8 @@ type Rect = {
   height: number,
 };
 
+type Camera1ScanMode = 'none' | 'eco' | 'fast' | 'boost';
+
 type PropsType = typeof View.props & {
   zoom?: number,
   useNativeZoom?: boolean,
@@ -272,7 +274,16 @@ type PropsType = typeof View.props & {
   barCodeTypes?: Array<string>,
   googleVisionBarcodeType?: number,
   googleVisionBarcodeMode?: number,
-  whiteBalance?: number | string | {temperature: number, tint: number, redGainOffset?: number, greenGainOffset?: number, blueGainOffset?: number },
+  whiteBalance?:
+    | number
+    | string
+    | {
+        temperature: number,
+        tint: number,
+        redGainOffset?: number,
+        greenGainOffset?: number,
+        blueGainOffset?: number,
+      },
   faceDetectionLandmarks?: number,
   autoFocus?: string | boolean | number,
   autoFocusPointOfInterest?: { x: number, y: number },
@@ -287,6 +298,7 @@ type PropsType = typeof View.props & {
   videoStabilizationMode?: number | string,
   pictureSize?: string,
   rectOfInterest: Rect,
+  camera1ScanMode?: Camera1ScanMode,
 };
 
 type StateType = {
@@ -427,11 +439,17 @@ export default class Camera extends React.Component<PropsType, StateType> {
     cameraId: PropTypes.string,
     flashMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     exposure: PropTypes.number,
-    whiteBalance: PropTypes.oneOfType([PropTypes.string, PropTypes.number,
-      PropTypes.shape({ temperature: PropTypes.number, tint: PropTypes.number,
+    whiteBalance: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.shape({
+        temperature: PropTypes.number,
+        tint: PropTypes.number,
         redGainOffset: PropTypes.number,
         greenGainOffset: PropTypes.number,
-        blueGainOffset: PropTypes.number })]),
+        blueGainOffset: PropTypes.number,
+      }),
+    ]),
     autoFocus: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
     autoFocusPointOfInterest: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
     permissionDialogTitle: PropTypes.string,
@@ -450,6 +468,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     mirrorVideo: PropTypes.bool,
     rectOfInterest: PropTypes.any,
     defaultVideoQuality: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    camera1ScanMode: PropTypes.string,
   };
 
   static defaultProps: Object = {
@@ -492,6 +511,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     playSoundOnCapture: false,
     playSoundOnRecord: false,
     pictureSize: 'None',
+    camera1ScanMode: 'eco',
     videoStabilizationMode: 0,
     mirrorVideo: false,
   };
@@ -720,7 +740,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     }
   };
 
-  _onSubjectAreaChanged = e => {
+  _onSubjectAreaChanged = (e) => {
     if (this.props.onSubjectAreaChanged) {
       this.props.onSubjectAreaChanged(e);
     }

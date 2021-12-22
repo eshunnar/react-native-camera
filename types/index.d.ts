@@ -14,6 +14,14 @@
 import { Component, ReactNode } from 'react';
 import { NativeMethods, ViewProperties, findNodeHandle } from 'react-native';
 
+// Android only
+type Camera1ScanModes = Readonly<{
+  none: any;
+  eco: any;
+  fast: any;
+  boost: any;
+}>;
+
 type Orientation = Readonly<{
   auto: any;
   landscapeLeft: any;
@@ -73,8 +81,8 @@ type VideoCodec = Readonly<{
   AppleProRes4444: symbol;
 }>;
 type ImageType = Readonly<{
-  'jpeg': any;
-  'png': any;
+  jpeg: any;
+  png: any;
 }>;
 
 type FaceDetectionClassifications = Readonly<{ all: any; none: any }>;
@@ -107,13 +115,11 @@ type RecordAudioPermissionStatus = Readonly<
     NOT_AUTHORIZED: 'NOT_AUTHORIZED';
   }>
 >;
-type FaCC = (
-  params: {
-    camera: RNCamera;
-    status: keyof CameraStatus;
-    recordAudioPermissionStatus: keyof RecordAudioPermissionStatus;
-  },
-) => JSX.Element;
+type FaCC = (params: {
+  camera: RNCamera;
+  status: keyof CameraStatus;
+  recordAudioPermissionStatus: keyof RecordAudioPermissionStatus;
+}) => JSX.Element;
 
 export interface Constants {
   CameraStatus: CameraStatus;
@@ -281,6 +287,7 @@ export interface RNCameraProps {
   defaultVideoQuality?: keyof VideoQuality;
   /* if true, audio session will not be released on component unmount */
   keepAudioSession?: boolean;
+  camera1ScanMode?: keyof Camera1ScanModes;
 }
 
 interface Point<T = number> {
@@ -293,7 +300,7 @@ interface Size<T = number> {
   height: T;
 }
 
-interface RectOfInterest extends Point,Size{}
+interface RectOfInterest extends Point, Size {}
 
 export interface Barcode {
   bounds: {

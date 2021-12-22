@@ -125,6 +125,7 @@ public class CameraViewManager extends ViewGroupManager<RNCameraView> {
   public void setUseNativeZoom(RNCameraView view, boolean useNativeZoom) {
     view.setUseNativeZoom(useNativeZoom);
   }
+  
   @ReactProp(name = "whiteBalance")
   public void setWhiteBalance(RNCameraView view, int whiteBalance) {
     view.setWhiteBalance(whiteBalance);
@@ -243,4 +244,9 @@ public class CameraViewManager extends ViewGroupManager<RNCameraView> {
     }
   }
   /**---limit scan area addition---**/
+
+  @ReactProp(name = "camera1ScanMode")
+  public void setCamera1ScanMode(RNCameraView view, String camera1ScanMode) {
+    view.setCamera1ScanMode(camera1ScanMode);
+  }
 }
