@@ -55,7 +55,7 @@ public class YuvToBitmap {
         return mBitmap;
     }
 
-    public void refreshBitmap(byte[] data, int width, int height) {
+    public void refreshBitmap(final byte[] data, final int width, final int height) {
         mReloadBitmap = true;
         this.prepare(width, height);
         aIn.copyFrom(data);

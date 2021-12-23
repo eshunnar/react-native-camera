@@ -14,6 +14,9 @@ import android.media.CamcorderProfile;
 import android.media.MediaActionSound;
 import android.os.Build;
 import androidx.core.content.ContextCompat;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.AudioManager;
 
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -109,6 +112,10 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
   private int mCameraViewWidth = 0;
   private int mCameraViewHeight = 0;
 
+  private synchronized void storeRotated(Bitmap rotated) {
+    mRotated = rotated;
+  }
+
   public RNCameraView(ThemedReactContext themedReactContext) {
     super(themedReactContext, true);
     mThemedReactContext = themedReactContext;
@@ -177,8 +184,8 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
       }
 
       @Override
-      public void onFramePreview(CameraView cameraView, byte[] data, int width, int height, int rotation) {
-        int correctRotation = RNCameraViewHelper.getCorrectCameraRotation(rotation, getFacing(), getCameraOrientation());
+      public void onFramePreview(CameraView cameraView, final byte[] data, final int width, final int height, final int rotation) {
+        final int correctRotation = RNCameraViewHelper.getCorrectCameraRotation(rotation, getFacing(), getCameraOrientation());
         boolean willCallBarCodeTask = mShouldScanBarCodes && !barCodeScannerTaskLock && cameraView instanceof BarCodeScannerAsyncTaskDelegate;
         boolean willCallFaceTask = mShouldDetectFaces && !faceDetectorTaskLock && cameraView instanceof FaceDetectorAsyncTaskDelegate;
         boolean willCallGoogleBarcodeTask = mShouldGoogleDetectBarcodes && !googleBarcodeDetectorTaskLock && cameraView instanceof BarcodeDetectorAsyncTaskDelegate;
@@ -378,8 +385,12 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
   }
 
   private void resolveTakenPicture(Bitmap picture, ReadableMap options, final Promise promise, File cacheDirectory) {
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+    byte[] byteArray = stream.toByteArray();
+    picture.recycle();
     ResolveTakenPictureAsyncTask task = new ResolveTakenPictureAsyncTask(
-            picture, promise, options, cacheDirectory, 0, RNCameraView.this
+      byteArray, promise, options, cacheDirectory, 0, 0, RNCameraView.this
     );
 
     if (Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
@@ -420,7 +431,7 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
     }
     try {
       if (takePicture) {
-        super.takePicture(options);
+        RNCameraView.super.takePicture(options);
       } else {
         checkScanning();
       }
